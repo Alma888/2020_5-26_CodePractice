@@ -1,0 +1,112 @@
+# 2020_5-26_CodePractice
+
+//标题:  n个数里出现次数大于等于n/2的数
+//      输入n个整数，输出出现次数大于等于数组长度一半的数。
+//    【输入描述】
+//          每个测试输入包含 n个空格分割的n个整数，n不超过100，其中有一个整
+//          数出现次数大于等于n/2。
+//    【输出描述】
+//          输出出现次数大于等于n/2的数。
+//    【示例1】输入  3 9 3 2 5 6 7 3 2 3 3 3
+//                    输出   3
+
+//【题目解析】：
+//这道题目看上去在考数学相关问题，但是通过前几天的训练，
+// 相信大家一眼就能看出来这道题其实还是考察你的String类用的6不6.
+// 刷过<<剑指 offer>>的童鞋相信对这道题目不会陌生，没错就是原题！
+//【解题思路】：
+//关键方法：
+//str.split(" "):按照空格切分字符串
+//Integer.valueOf(str):将数字字符串转为int
+
+——————————————————————————————————————————————————//此题我这里有三种解法————————————————————————————————————————————————————————
+
+方法一：
+//O(n)思想：因为要找过半的数，用一个变量count记录读取每个变量变化的次数，
+//一个变量num记录可能过半的数，先让count=1，然后让num=arr[0]，
+//然后往后遍历一遍，碰到和num相同的数就给count++，否则就count--
+//如果，count变成0，就让num=arr[j](arr数组遍历过程当前值),并让count=1
+//如此遍历一遍，因为有一个数过半，所以num最后肯定存储的是过半的数
+import java.util.Scanner;
+public class Main1 {
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        while (sc.hasNext()){
+            String[] str = sc.nextLine().split(" ");
+            int[] arr=new int[str.length];
+            for(int i=0;i<str.length;i++){
+                arr[i] = Integer.valueOf(str[i]);
+            }
+            int num = arr[0];
+            int count =1;
+            for (int j = 1; j < arr.length; j++) {
+                if (arr[j] == num) {
+                    count++;
+                } else if (count > 0) {
+                    count--;
+                } else {
+                    num = arr[j];
+                }
+            }
+                System.out.println(num);
+            }
+        }
+    }
+
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+方法二：
+//使用map的方法如下：
+import java.util.Scanner;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+public class Main2{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            Map<Integer,Integer> map = new TreeMap<>();
+            String[] strs = sc.nextLine().split(" ");
+            for(int i=0;i<strs.length;i++){
+                int s = Integer.valueOf(strs[i]);
+                if(map.containsKey(s)){
+                    map.put(s,map.get(s)+1);
+                }else{
+                    map.put(s,1);
+                }
+            }
+            for(Map.Entry<Integer,Integer> entry : map.entrySet()){
+                if(entry.getValue() >= strs.length/2){
+                    System.out.println(entry.getKey());
+                }
+            }
+        }
+    }
+}
+
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+方法三：
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+//解题思路：
+//将输入的一组数进行排序，排序后直接输出中间下标的数就是出现次数大于或等于数组大小一半
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner cin = new Scanner(System.in);
+
+        ArrayList<Integer> list = new ArrayList<>();
+        while(cin.hasNext()){
+            list.add(cin.nextInt());
+        }
+
+        Collections.sort(list);
+
+        System.out.println(list.get(list.size()/2-1));
+
+    }
+}
